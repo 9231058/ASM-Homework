@@ -1,4 +1,4 @@
 ASM-Homework
 ============
 
-Dr.Zarandi Assembly homeworks
+Dr.zarandi Assembly homeworks

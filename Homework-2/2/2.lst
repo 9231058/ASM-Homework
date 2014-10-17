@@ -1,0 +1,72 @@
+     1                                  BITS 64
+     2                                  section .data
+     3                                  
+     4                                  section .bss
+     5 00000000 <res 00000001>          	read_byte: resb 1
+     6                                  section .text
+     7                                  	global _start
+     8                                  _start:
+     9 00000000 B000                    	mov al, 0
+    10                                  	
+    11 00000002 50                      	push rax
+    12                                  	
+    13 00000003 B803000000              	mov eax, 3
+    14 00000008 BB00000000              	mov ebx, 0
+    15 0000000D B9[00000000]            	mov ecx, read_byte
+    16 00000012 BA01000000              	mov edx, 1
+    17 00000017 CD80                    	int 80H
+    18                                  
+    19 00000019 58                      	pop rax
+    20                                  
+    21 0000001A 8A2425[00000000]        	mov byte ah, [read_byte]
+    22                                  
+    23 00000021 E84E000000              	call checker
+    24 00000026 84E4                    	test ah, ah
+    25 00000028 74D6                    	jz _start
+    26 0000002A 80EC30                  	sub ah, 30H
+    27                                  
+    28 0000002D 00E0                    	add al, ah
+    29                                  	
+    30 0000002F 50                      	push rax
+    31                                  
+    32 00000030 B803000000              	mov eax, 3
+    33 00000035 BB00000000              	mov ebx, 0
+    34 0000003A B9[00000000]            	mov ecx, read_byte
+    35 0000003F BA01000000              	mov edx, 1
+    36 00000044 CD80                    	int 80H
+    37                                  
+    38 00000046 58                      	pop rax
+    39                                  
+    40 00000047 8A2425[00000000]        	mov byte ah, [read_byte]
+    41                                  
+    42 0000004E E821000000              	call checker
+    43 00000053 84E4                    	test ah, ah
+    44 00000055 74A9                    	jz _start
+    45 00000057 80EC30                  	sub ah, 30H
+    46                                  	
+    47 0000005A B30A                    	mov bl, 10
+    48 0000005C 88C7                    	mov bh, al
+    49 0000005E 88E0                    	mov al, ah
+    50 00000060 B400                    	mov ah, 0
+    51 00000062 F6E3                    	mul bl
+    52 00000064 88F8                    	mov al, bh
+    53                                  
+    54 00000066 00C0                    	add al, al
+    55                                  
+    56                                  exit:
+    57 00000068 B801000000              	mov eax, 1
+    58 0000006D BB00000000              	mov ebx, 0
+    59 00000072 CD80                    	int 80H
+    60                                  
+    61                                  checker:
+    62 00000074 80FC30                  	cmp ah, '0'
+    63 00000077 7206                    	jb checker_false
+    64                                  
+    65 00000079 80FC39                  	cmp ah, '9'
+    66 0000007C 7701                    	ja checker_false
+    67                                  
+    68 0000007E C3                      	ret
+    69                                  
+    70                                  checker_false:
+    71 0000007F B400                    	mov ah, 0
+    72 00000081 C3                      	ret

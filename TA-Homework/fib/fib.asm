@@ -1,8 +1,17 @@
+section .data
+	number: dd 10
+	format: db "%d", 10, 0
 section .text
-	global _start
-_start:
-	mov eax, 3
+	global main
+	extern printf
+main:
+	mov eax, [number]
 	call fib
+
+	mov eax, 0
+	mov rdi, format
+	mov rsi, rcx
+	call printf
 
 	mov eax, 1
 	mov ebx, 0

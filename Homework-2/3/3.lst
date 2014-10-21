@@ -1,0 +1,6 @@
+     1                                  section .data
+     2 00000000 576861742074696D65-     	msg: db "What time is it?"
+     3 00000009 2069732069743F     
+     4                                  section .text
+     5                                  	global _start
+     6                                  _start:

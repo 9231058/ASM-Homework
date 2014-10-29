@@ -1,0 +1,34 @@
+     1                                  section .data
+     2 00000000 A086010000000000        	n: dq 100000
+     3 00000008 53756D206973202564-     	format: db "Sum is %d", 10
+     4 00000011 0A                 
+     5                                  section .text
+     6                                  	extern printf
+     7                                  	global main
+     8                                  main:
+     9 00000000 488B0425[00000000]      	mov rax, [n]
+    10 00000008 E817000000              	call sum
+    11                                  
+    12 0000000D 48BF-                   	mov rdi, format
+    13 0000000F [0800000000000000] 
+    14 00000017 4889C6                  	mov rsi, rax
+    15 0000001A B800000000              	mov rax, 0
+    16 0000001F E8(00000000)            	call printf
+    17                                  
+    18                                  sum:
+    19 00000024 4885C0                  	test rax, rax
+    20 00000027 740F                    	jz sum_ret_0
+    21                                  	
+    22 00000029 50                      	push rax
+    23                                  	
+    24 0000002A 48FFC8                  	dec rax
+    25 0000002D E8F2FFFFFF              	call sum
+    26                                  	
+    27 00000032 5A                      	pop rdx
+    28 00000033 4801D0                  	add rax, rdx
+    29 00000036 EB05                    	jmp sum_ret
+    30                                  
+    31                                  sum_ret_0:
+    32 00000038 B800000000              	mov rax, 0
+    33                                  sum_ret:
+    34 0000003D C3                      	ret

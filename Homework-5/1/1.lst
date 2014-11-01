@@ -1,37 +1,75 @@
      1                                  section .data
-     2 00000000 A086010000000000        	n: dq 100000
-     3 00000008 53756D206973202564-     	format: db "Sum is %d", 10, 0
-     4 00000011 0A00               
+     2 00000000 1400000000000000        	n: dq 20
+     3                                  section .bss
+     4 00000000 <res 00000001>          	write_byte: resb 1	
      5                                  section .text
-     6                                  	extern printf
-     7                                  	global main
-     8                                  main:
-     9 00000000 488B0425[00000000]      	mov rax, [n]
-    10 00000008 E823000000              	call sum
-    11                                  
-    12 0000000D 48BF-                   	mov rdi, format
-    13 0000000F [0800000000000000] 
-    14 00000017 4889C6                  	mov rsi, rax
-    15 0000001A B800000000              	mov rax, 0
-    16 0000001F E8(00000000)            	call printf
-    17                                  	
-    18 00000024 B801000000              	mov eax, 1
-    19 00000029 BB00000000              	mov ebx, 0
-    20 0000002E CD80                    	int 80H
-    21                                  sum:
-    22 00000030 4885C0                  	test rax, rax
-    23 00000033 740F                    	jz sum_ret_0
+     6                                  	global _start
+     7                                  _start:
+     8 00000000 488B0425[00000000]      	mov rax, [n]
+     9 00000008 E811000000              	call sum
+    10                                  
+    11 0000000D E826000000              	call print
+    12                                  	
+    13 00000012 B801000000              	mov eax, 1
+    14 00000017 BB00000000              	mov ebx, 0
+    15 0000001C CD80                    	int 80H
+    16                                  sum:
+    17 0000001E 4885C0                  	test rax, rax
+    18 00000021 740F                    	jz sum_ret_0
+    19                                  	
+    20 00000023 50                      	push rax
+    21                                  	
+    22 00000024 48FFC8                  	dec rax
+    23 00000027 E8F2FFFFFF              	call sum
     24                                  	
-    25 00000035 50                      	push rax
-    26                                  	
-    27 00000036 48FFC8                  	dec rax
-    28 00000039 E8F2FFFFFF              	call sum
-    29                                  	
-    30 0000003E 5A                      	pop rdx
-    31 0000003F 4801D0                  	add rax, rdx
-    32 00000042 EB05                    	jmp sum_ret
-    33                                  
-    34                                  sum_ret_0:
-    35 00000044 B800000000              	mov rax, 0
-    36                                  sum_ret:
-    37 00000049 C3                      	ret
+    25 0000002C 5A                      	pop rdx
+    26 0000002D 4801D0                  	add rax, rdx
+    27 00000030 EB05                    	jmp sum_ret
+    28                                  
+    29                                  sum_ret_0:
+    30 00000032 B800000000              	mov rax, 0
+    31                                  sum_ret:
+    32 00000037 C3                      	ret
+    33                                  print:
+    34 00000038 41B800000000            	mov r8, 0
+    35                                  digit:
+    36 0000003E 49FFC0                  	inc r8
+    37                                  
+    38 00000041 B90A000000              	mov rcx, 10
+    39 00000046 BA00000000              	mov rdx, 0
+    40 0000004B 48F7F1                  	div rcx
+    41                                  	
+    42 0000004E 4883C230                	add rdx, 30H
+    43 00000052 52                      	push rdx
+    44                                  	
+    45 00000053 4885C0                  	test rax, rax
+    46 00000056 75E6                    	jnz digit
+    47                                  write:
+    48 00000058 49FFC8                  	dec r8
+    49                                  	
+    50 0000005B 5A                      	pop rdx
+    51 0000005C 881425[00000000]        	mov byte [write_byte], dl
+    52                                  
+    53 00000063 4150                    	push r8
+    54                                  
+    55 00000065 B804000000              	mov rax, 4
+    56 0000006A BB01000000              	mov rbx, 1
+    57 0000006F 48B9-                   	mov rcx, write_byte
+    58 00000071 [0000000000000000] 
+    59 00000079 BA01000000              	mov rdx, 1
+    60 0000007E CD80                    	int 80H
+    61                                  
+    62 00000080 4158                    	pop r8
+    63                                  
+    64 00000082 4D85C0                  	test r8, r8
+    65 00000085 75D1                    	jnz write
+    66                                  
+    67 00000087 C60425[00000000]0A      	mov byte [write_byte], 10
+    68                                  	
+    69 0000008F B804000000              	mov eax, 4
+    70 00000094 BB01000000              	mov ebx, 1
+    71 00000099 B9[00000000]            	mov ecx, write_byte
+    72 0000009E BA01000000              	mov edx, 1
+    73 000000A3 CD80                    	int 80H
+    74                                  
+    75 000000A5 C3                      	ret

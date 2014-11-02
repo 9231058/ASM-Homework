@@ -1,0 +1,107 @@
+     1                                  section .data
+     2 00000000 48454C4C4F0A            	H: db "HELLO", 10
+     3                                  	H_len equ $-H
+     4                                  	
+     5 00000006 474F4F444259450A        	G: db "GOODBYE", 10
+     6                                  	G_len equ $-G
+     7                                  	
+     8 0000000E 4E49434520544F204D-     	N: db "NICE TO MEET YOU", 10
+     9 00000017 45455420594F550A   
+    10                                  	N_len equ $-N
+    11                                  	
+    12 0000001F 48415645204E494345-     	D: db "HAVE NICE DAY", 10
+    13 00000028 204441590A         
+    14                                  	D_len equ $-D
+    15                                  	
+    16 0000002D 434F4E47524154554C-     	C: db "CONGRATULATION", 10
+    17 00000036 4154494F4E0A       
+    18                                  	C_len equ $-C
+    19                                  section .bss
+    20 00000000 <res 0000000A>          	buffer: resb 10
+    21                                  section .text
+    22                                  	global _start
+    23                                  _start:
+    24 00000000 B903000000              	mov rcx, 3
+    25                                  .read:
+    26 00000005 51                      	push rcx
+    27                                  
+    28 00000006 B803000000              	mov eax, 3
+    29 0000000B BB00000000              	mov ebx, 0
+    30 00000010 B9[00000000]            	mov ecx, buffer 
+    31 00000015 BA02000000              	mov edx, 2
+    32 0000001A CD80                    	int 80H
+    33                                  
+    34 0000001C 8A0425[00000000]        	mov byte al, [buffer]
+    35 00000023 E80F000000              	call print_message
+    36                                  	
+    37 00000028 59                      	pop rcx
+    38                                  
+    39 00000029 E2DA                    	loop .read
+    40                                  
+    41                                  .exit:
+    42 0000002B B801000000              	mov eax, 1
+    43 00000030 BB00000000              	mov ebx, 0
+    44 00000035 CD80                    	int 80H
+    45                                  
+    46                                  print_message:
+    47 00000037 55                      	push rbp
+    48 00000038 4889E5                  	mov rbp, rsp
+    49                                  
+    50 0000003B 3C48                    	cmp al, 'H'
+    51 0000003D 7410                    	jz .H
+    52                                  
+    53 0000003F 3C47                    	cmp al, 'G'
+    54 00000041 7424                    	jz .G
+    55                                  
+    56 00000043 3C4E                    	cmp al, 'N'
+    57 00000045 7438                    	jz .N
+    58                                  
+    59 00000047 3C44                    	cmp al, 'D'
+    60 00000049 744C                    	jz .D
+    61                                  
+    62 0000004B 3C43                    	cmp al, 'C'
+    63 0000004D 7460                    	jz .C
+    64                                  
+    65                                  .H:
+    66 0000004F B804000000              	mov eax, 4
+    67 00000054 BB01000000              	mov ebx, 1
+    68 00000059 B9[00000000]            	mov ecx, H
+    69 0000005E BA06000000              	mov edx, H_len
+    70 00000063 CD80                    	int 80H
+    71 00000065 EB60                    	jmp .ret
+    72                                  
+    73                                  .G:
+    74 00000067 B804000000              	mov eax, 4
+    75 0000006C BB01000000              	mov ebx, 1
+    76 00000071 B9[06000000]            	mov ecx, G
+    77 00000076 BA08000000              	mov edx, G_len
+    78 0000007B CD80                    	int 80H
+    79 0000007D EB48                    	jmp .ret
+    80                                  
+    81                                  .N:
+    82 0000007F B804000000              	mov eax, 4
+    83 00000084 BB01000000              	mov ebx, 1
+    84 00000089 B9[0E000000]            	mov ecx, N
+    85 0000008E BA11000000              	mov edx, N_len
+    86 00000093 CD80                    	int 80H
+    87 00000095 EB30                    	jmp .ret
+    88                                  
+    89                                  .D:
+    90 00000097 B804000000              	mov eax, 4
+    91 0000009C BB01000000              	mov ebx, 1
+    92 000000A1 B9[1F000000]            	mov ecx, D
+    93 000000A6 BA0E000000              	mov edx, D_len
+    94 000000AB CD80                    	int 80H
+    95 000000AD EB18                    	jmp .ret
+    96                                  
+    97                                  .C:
+    98 000000AF B804000000              	mov eax, 4
+    99 000000B4 BB01000000              	mov ebx, 1
+   100 000000B9 B9[2D000000]            	mov ecx, C
+   101 000000BE BA0F000000              	mov edx, C_len
+   102 000000C3 CD80                    	int 80H
+   103 000000C5 EB00                    	jmp .ret
+   104                                  
+   105                                  .ret:
+   106 000000C7 5D                      	pop rbp
+   107 000000C8 C3                      	ret

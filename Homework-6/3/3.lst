@@ -1,0 +1,42 @@
+     1                                  section .bss
+     2 00000000 <res 0000000A>          	read: resb 10
+     3 0000000A <res 0000000A>          	print: resb 10
+     4                                  section .data
+     5                                  	global _start
+     6                                  _start:
+     7 00000000 B803000000              	mov eax, 3
+     8 00000005 BB00000000              	mov ebx, 0
+     9 0000000A B9[00000000]            	mov ecx, read
+    10 0000000F BA02000000              	mov edx, 2
+    11 00000014 CD80                    	int 80H
+    12                                  
+    13 00000016 8A0425[00000000]        	mov byte al, [read]
+    14                                  
+    15                                  .print_alpha:
+    16 0000001D 880425[0A000000]        	mov byte [print], al
+    17                                  
+    18 00000024 B804000000              	mov eax, 4
+    19 00000029 BB01000000              	mov ebx, 1
+    20 0000002E B9[0A000000]            	mov ecx, print
+    21 00000033 BA01000000              	mov edx, 1
+    22 00000038 CD80                    	int 80H
+    23                                  
+    24 0000003A 8A0425[0A000000]        	mov byte al, [print]
+    25                                  
+    26 00000041 FEC0                    	inc al
+    27 00000043 3C7A                    	cmp al, 'z'
+    28 00000045 76D6                    	jbe .print_alpha
+    29                                  
+    30                                  .print_lf:
+    31 00000047 C60425[0A000000]0A      	mov byte [print], 10
+    32                                  
+    33 0000004F B804000000              	mov eax, 4
+    34 00000054 BB01000000              	mov ebx, 1
+    35 00000059 B9[0A000000]            	mov ecx, print
+    36 0000005E BA01000000              	mov edx, 1
+    37 00000063 CD80                    	int 80H
+    38                                  
+    39                                  .exit:
+    40 00000065 B801000000              	mov eax, 1
+    41 0000006A BB00000000              	mov ebx, 0
+    42 0000006F CD80                    	int 80H

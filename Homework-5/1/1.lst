@@ -15,7 +15,7 @@
     15 0000001C CD80                    	int 80H
     16                                  sum:
     17 0000001E 4885C0                  	test rax, rax
-    18 00000021 740F                    	jz sum_ret_0
+    18 00000021 740F                    	jz .ret_0
     19                                  	
     20 00000023 50                      	push rax
     21                                  	
@@ -24,15 +24,15 @@
     24                                  	
     25 0000002C 5A                      	pop rdx
     26 0000002D 4801D0                  	add rax, rdx
-    27 00000030 EB05                    	jmp sum_ret
+    27 00000030 EB05                    	jmp .ret
     28                                  
-    29                                  sum_ret_0:
+    29                                  .ret_0:
     30 00000032 B800000000              	mov rax, 0
-    31                                  sum_ret:
+    31                                  .ret:
     32 00000037 C3                      	ret
     33                                  print:
     34 00000038 41B800000000            	mov r8, 0
-    35                                  digit:
+    35                                  .digit:
     36 0000003E 49FFC0                  	inc r8
     37                                  
     38 00000041 B90A000000              	mov rcx, 10
@@ -43,8 +43,8 @@
     43 00000052 52                      	push rdx
     44                                  	
     45 00000053 4885C0                  	test rax, rax
-    46 00000056 75E6                    	jnz digit
-    47                                  write:
+    46 00000056 75E6                    	jnz .digit
+    47                                  .write:
     48 00000058 49FFC8                  	dec r8
     49                                  	
     50 0000005B 5A                      	pop rdx
@@ -62,7 +62,7 @@
     62 00000080 4158                    	pop r8
     63                                  
     64 00000082 4D85C0                  	test r8, r8
-    65 00000085 75D1                    	jnz write
+    65 00000085 75D1                    	jnz .write
     66                                  
     67 00000087 C60425[00000000]0A      	mov byte [write_byte], 10
     68                                  	

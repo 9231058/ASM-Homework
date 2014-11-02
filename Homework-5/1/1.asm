@@ -15,7 +15,7 @@ _start:
 	int 80H
 sum:
 	test rax, rax
-	jz sum_ret_0
+	jz .ret_0
 	
 	push rax
 	
@@ -24,15 +24,15 @@ sum:
 	
 	pop rdx
 	add rax, rdx
-	jmp sum_ret
+	jmp .ret
 
-sum_ret_0:
+.ret_0:
 	mov rax, 0
-sum_ret:
+.ret:
 	ret
 print:
 	mov r8, 0
-digit:
+.digit:
 	inc r8
 
 	mov rcx, 10
@@ -43,8 +43,8 @@ digit:
 	push rdx
 	
 	test rax, rax
-	jnz digit
-write:
+	jnz .digit
+.write:
 	dec r8
 	
 	pop rdx
@@ -61,7 +61,7 @@ write:
 	pop r8
 
 	test r8, r8
-	jnz write
+	jnz .write
 
 	mov byte [write_byte], 10
 	

@@ -21,7 +21,7 @@ compare:
 	jz equal
 	jnz not_equal
 
-re_init:
+re_loop:
 	dec rcx
 	jnz compare
 	jmp exit
@@ -29,16 +29,16 @@ re_init:
 equal:
 	dec rdx
 	jz inc_rax
-	jmp re_init
+	jmp re_loop
 
 inc_rax:
 	inc rax
 	mov rdx, chars_len
-	jmp re_init
+	jmp re_loop
 
 not_equal:
 	mov rdi, chars
-	jmp re_init
+	jmp re_loop
 
 exit:
 	mov rdi, format

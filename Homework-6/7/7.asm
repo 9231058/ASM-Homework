@@ -1,0 +1,28 @@
+section .data
+	_word: dw 1111111111111111b
+	format: db "The number of 1 is: %d", 10, 0
+section .text
+	global main
+	extern printf
+main:
+	mov ax, [_word]
+	mov cx, 16
+	mov dx, 0
+
+.loop:
+	shl ax, 1
+	jnc .reloop
+	inc dx
+
+.reloop:	
+	loop .loop
+
+.exit:
+	mov rax, 0
+	mov rdi, format
+	movzx rsi, dx
+	call printf
+
+	mov eax, 1
+	mov ebx, 0
+	int 80H

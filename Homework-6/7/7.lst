@@ -1,0 +1,31 @@
+     1                                  section .data
+     2 00000000 FFFF                    	_word: dw 1111111111111111b
+     3 00000002 546865206E756D6265-     	format: db "The number of 1 is: %d", 10, 0
+     4 0000000B 72206F662031206973-
+     5 00000014 3A2025640A00       
+     6                                  section .text
+     7                                  	global main
+     8                                  	extern printf
+     9                                  main:
+    10 00000000 668B0425[00000000]      	mov ax, [_word]
+    11 00000008 66B91000                	mov cx, 16
+    12 0000000C 66BA0000                	mov dx, 0
+    13                                  
+    14                                  .loop:
+    15 00000010 66D1E0                  	shl ax, 1
+    16 00000013 7303                    	jnc .reloop
+    17 00000015 66FFC2                  	inc dx
+    18                                  
+    19                                  .reloop:	
+    20 00000018 E2F6                    	loop .loop
+    21                                  
+    22                                  .exit:
+    23 0000001A B800000000              	mov rax, 0
+    24 0000001F 48BF-                   	mov rdi, format
+    25 00000021 [0200000000000000] 
+    26 00000029 480FB7F2                	movzx rsi, dx
+    27 0000002D E8(00000000)            	call printf
+    28                                  
+    29 00000032 B801000000              	mov eax, 1
+    30 00000037 BB00000000              	mov ebx, 0
+    31 0000003C CD80                    	int 80H

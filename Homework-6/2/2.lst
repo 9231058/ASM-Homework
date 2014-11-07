@@ -1,0 +1,264 @@
+     1                                  %define MAX_BUFF 1024
+     2                                  
+     3                                  section .rodata:
+     4 00000000 506C6561736520656E-     	PU: db "Please enter the username: ", 0
+     5 00000009 746572207468652075-
+     6 00000012 7365726E616D653A20-
+     7 0000001B 00                 
+     8 0000001C 506C6561736520656E-     	PP: db "Please enter the password: ", 0
+     9 00000025 746572207468652070-
+    10 0000002E 617373776F72643A20-
+    11 00000037 00                 
+    12                                  	
+    13 00000038 57726F6E6720757365-     	WU: db "Wrong username", 10, 0
+    14 00000041 726E616D650A00     
+    15 00000048 57726F6E6720706173-     	WP: db "Wrong password", 10, 0
+    16 00000051 73776F72640A00     
+    17                                  
+    18 00000058 557365726E616D6531-     	U1: db "Username1: ", 0
+    19 00000061 3A2000             
+    20 00000064 50617373776F726431-     	P1: db "Password1: ", 0
+    21 0000006D 3A2000             
+    22 00000070 557365726E616D6532-     	U2: db "Username2: ", 0
+    23 00000079 3A2000             
+    24 0000007C 50617373776F726432-     	P2: db "Password2: ", 0
+    25 00000085 3A2000             
+    26 00000088 557365726E616D6533-     	U3: db "Username3: ", 0
+    27 00000091 3A2000             
+    28 00000094 50617373776F726433-     	P3: db "Password3: ", 0
+    29 0000009D 3A2000             
+    30                                  
+    31 000000A0 596F7520656E746572-     	S: db "You entered successfully", 10, 0
+    32 000000A9 656420737563636573-
+    33 000000B2 7366756C6C790A00   
+    34                                  
+    35                                  section .bss
+    36 00000000 <res 00000400>          	user1: resb MAX_BUFF
+    37 00000400 <res 00000400>          	pass1: resb MAX_BUFF
+    38                                  
+    39 00000800 <res 00000400>          	user2: resb MAX_BUFF
+    40 00000C00 <res 00000400>          	pass2: resb MAX_BUFF
+    41                                  	
+    42 00001000 <res 00000400>          	user3: resb MAX_BUFF
+    43 00001400 <res 00000400>          	pass3: resb MAX_BUFF
+    44                                  
+    45 00001800 <res 00000400>          	user: resb MAX_BUFF
+    46 00001C00 <res 00000400>          	pass: resb MAX_BUFF
+    47                                  
+    48                                  section .text
+    49                                  	global _start
+    50                                  _start:	
+    51 00000000 48BF-                   	mov rdi, U1
+    52 00000002 [5800000000000000] 
+    53 0000000A E812020000              	call puts
+    54 0000000F 48BF-                   	mov rdi, user1
+    55 00000011 [0000000000000000] 
+    56 00000019 E8E8010000              	call gets
+    57                                  	
+    58 0000001E 48BF-                   	mov rdi, P1
+    59 00000020 [6400000000000000] 
+    60 00000028 E8F4010000              	call puts
+    61 0000002D 48BF-                   	mov rdi, pass1
+    62 0000002F [0004000000000000] 
+    63 00000037 E8CA010000              	call gets
+    64                                  
+    65 0000003C 48BF-                   	mov rdi, U2
+    66 0000003E [7000000000000000] 
+    67 00000046 E8D6010000              	call puts
+    68 0000004B 48BF-                   	mov rdi, user2
+    69 0000004D [0008000000000000] 
+    70 00000055 E8AC010000              	call gets
+    71                                  	
+    72 0000005A 48BF-                   	mov rdi, P2
+    73 0000005C [7C00000000000000] 
+    74 00000064 E8B8010000              	call puts
+    75 00000069 48BF-                   	mov rdi, pass2
+    76 0000006B [000C000000000000] 
+    77 00000073 E88E010000              	call gets
+    78                                  
+    79 00000078 48BF-                   	mov rdi, U3
+    80 0000007A [8800000000000000] 
+    81 00000082 E89A010000              	call puts
+    82 00000087 48BF-                   	mov rdi, user3
+    83 00000089 [0010000000000000] 
+    84 00000091 E870010000              	call gets
+    85                                  	
+    86 00000096 48BF-                   	mov rdi, P3
+    87 00000098 [9400000000000000] 
+    88 000000A0 E87C010000              	call puts
+    89 000000A5 48BF-                   	mov rdi, pass3
+    90 000000A7 [0014000000000000] 
+    91 000000AF E852010000              	call gets
+    92                                  	
+    93 000000B4 B900000000              	mov rcx, 0	;counter for five wrong exit policy
+    94                                  
+    95                                  .username:
+    96                                  	
+    97 000000B9 51                      	push rcx
+    98                                  
+    99 000000BA 48BF-                   	mov rdi, PU
+   100 000000BC [0000000000000000] 
+   101 000000C4 E858010000              	call puts
+   102 000000C9 48BF-                   	mov rdi, user
+   103 000000CB [0018000000000000] 
+   104 000000D3 E82E010000              	call gets
+   105                                  
+   106 000000D8 48BF-                   	mov rdi, user
+   107 000000DA [0018000000000000] 
+   108 000000E2 48BE-                   	mov rsi, user1
+   109 000000E4 [0000000000000000] 
+   110 000000EC E860010000              	call strcmp
+   111 000000F1 4885C0                  	test rax, rax
+   112 000000F4 745E                    	jz .password
+   113                                  
+   114 000000F6 48BF-                   	mov rdi, user
+   115 000000F8 [0018000000000000] 
+   116 00000100 48BE-                   	mov rsi, user2
+   117 00000102 [0008000000000000] 
+   118 0000010A E842010000              	call strcmp
+   119 0000010F 4885C0                  	test rax, rax
+   120 00000112 7440                    	jz .password
+   121                                  
+   122 00000114 48BF-                   	mov rdi, user
+   123 00000116 [0018000000000000] 
+   124 0000011E 48BE-                   	mov rsi, user3
+   125 00000120 [0010000000000000] 
+   126 00000128 E824010000              	call strcmp
+   127 0000012D 4885C0                  	test rax, rax
+   128 00000130 7422                    	jz .password
+   129                                  
+   130 00000132 48BF-                   	mov rdi, WU
+   131 00000134 [3800000000000000] 
+   132 0000013C E8E0000000              	call puts
+   133 00000141 59                      	pop rcx
+   134 00000142 48FFC1                  	inc rcx
+   135 00000145 4883F905                	cmp rcx, 5
+   136 00000149 0F84AB000000            	jz .exit
+   137 0000014F E965FFFFFF              	jmp .username
+   138                                  
+   139                                  .password:
+   140                                  
+   141 00000154 48BF-                   	mov rdi, PP
+   142 00000156 [1C00000000000000] 
+   143 0000015E E8BE000000              	call puts
+   144 00000163 48BF-                   	mov rdi, pass
+   145 00000165 [001C000000000000] 
+   146 0000016D E894000000              	call gets
+   147                                  
+   148 00000172 48BF-                   	mov rdi, pass
+   149 00000174 [001C000000000000] 
+   150 0000017C 48BE-                   	mov rsi, pass1
+   151 0000017E [0004000000000000] 
+   152 00000186 E8C6000000              	call strcmp
+   153 0000018B 4885C0                  	test rax, rax
+   154 0000018E 745B                    	jz .success
+   155                                  
+   156 00000190 48BF-                   	mov rdi, pass
+   157 00000192 [001C000000000000] 
+   158 0000019A 48BE-                   	mov rsi, pass2
+   159 0000019C [000C000000000000] 
+   160 000001A4 E8A8000000              	call strcmp
+   161 000001A9 4885C0                  	test rax, rax
+   162 000001AC 743D                    	jz .success
+   163                                  
+   164 000001AE 48BF-                   	mov rdi, pass
+   165 000001B0 [001C000000000000] 
+   166 000001B8 48BE-                   	mov rsi, pass3
+   167 000001BA [0014000000000000] 
+   168 000001C2 E88A000000              	call strcmp
+   169 000001C7 4885C0                  	test rax, rax
+   170 000001CA 741F                    	jz .success
+   171                                  
+   172 000001CC 48BF-                   	mov rdi, WP
+   173 000001CE [4800000000000000] 
+   174 000001D6 E846000000              	call puts
+   175 000001DB 59                      	pop rcx
+   176 000001DC 48FFC1                  	inc rcx
+   177 000001DF 4883F905                	cmp rcx, 5
+   178 000001E3 7415                    	jz .exit
+   179 000001E5 51                      	push rcx
+   180 000001E6 E969FFFFFF              	jmp .password
+   181                                  
+   182                                  .success:
+   183 000001EB 48BF-                   	mov rdi, S
+   184 000001ED [A000000000000000] 
+   185 000001F5 E827000000              	call puts
+   186                                  
+   187                                  .exit:
+   188 000001FA B801000000              	mov eax, 1
+   189 000001FF BB00000000              	mov ebx, 0
+   190 00000204 CD80                    	int 80H
+   191                                  
+   192                                  gets:
+   193 00000206 4889F9                  	mov rcx, rdi	;read parameters
+   194                                  	
+   195 00000209 57                      	push rdi
+   196 0000020A B803000000              	mov eax, 3
+   197 0000020F BB00000000              	mov ebx, 0
+   198 00000214 BA00040000              	mov edx, MAX_BUFF
+   199 00000219 CD80                    	int 80H
+   200 0000021B 5F                      	pop rdi
+   201                                  
+   202 0000021C C6040700                	mov byte [rdi + rax], 0
+   203                                  	
+   204 00000220 C3                      	ret
+   205                                  puts:
+   206 00000221 4889F9                  	mov rcx, rdi	;read parameters
+   207                                  	
+   208 00000224 51                      	push rcx
+   209 00000225 E811000000              	call strlen	
+   210 0000022A 4889C2                  	mov rdx, rax
+   211 0000022D 59                      	pop rcx
+   212                                  
+   213 0000022E B804000000              	mov eax, 4
+   214 00000233 BB01000000              	mov ebx, 1
+   215 00000238 CD80                    	int 80H
+   216                                  	
+   217 0000023A C3                      	ret
+   218                                  
+   219                                  strlen:
+   220 0000023B B000                    	mov al, 0
+   221 0000023D 4889FA                  	mov rdx, rdi
+   222                                  
+   223 00000240 B900040000              	mov rcx, MAX_BUFF
+   224 00000245 F2AE                    	repne scasb
+   225                                  	
+   226 00000247 4829D7                  	sub rdi, rdx
+   227 0000024A 48FFCF                  	dec rdi
+   228 0000024D 4889F8                  	mov rax, rdi
+   229                                  
+   230 00000250 C3                      	ret
+   231                                  
+   232                                  strcmp:
+   233 00000251 57                      	push rdi
+   234 00000252 56                      	push rsi
+   235 00000253 E8E3FFFFFF              	call strlen
+   236 00000258 4889C2                  	mov rdx, rax
+   237 0000025B 5E                      	pop rsi
+   238 0000025C 5F                      	pop rdi
+   239                                  
+   240 0000025D 4887FE                  	xchg rdi, rsi
+   241                                  
+   242 00000260 57                      	push rdi
+   243 00000261 56                      	push rsi
+   244 00000262 52                      	push rdx
+   245 00000263 E8D3FFFFFF              	call strlen
+   246 00000268 4889C1                  	mov rcx, rax
+   247 0000026B 5A                      	pop rdx
+   248 0000026C 5F                      	pop rdi
+   249 0000026D 5E                      	pop rsi
+   250                                  
+   251 0000026E 4839D1                  	cmp rcx, rdx
+   252 00000271 7507                    	jnz .not_equal
+   253                                  	
+   254 00000273 F3A6                    	repe cmpsb
+   255 00000275 4885C9                  	test rcx, rcx
+   256 00000278 7406                    	jz .equal
+   257                                  
+   258                                  .not_equal:
+   259 0000027A B801000000              	mov rax, 1
+   260 0000027F C3                      	ret
+   261                                  
+   262                                  .equal:
+   263 00000280 B800000000              	mov rax, 0
+   264 00000285 C3                      	ret

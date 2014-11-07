@@ -1,0 +1,40 @@
+     1                                  section .data
+     2 00000000 4142434445              	STRING1: db "ABCDE"
+     3 00000005 4142444445              	STRING2: db "ABDDE"
+     4                                  
+     5 0000000A 0500                    	NO_OF_BYTES: dw 5
+     6                                  
+     7 0000000C 45520A                  	ER: db "ER", 10
+     8 0000000F 4F4B0A                  	OK: db "OK", 10
+     9                                  section .text
+    10                                  	global _start
+    11                                  _start:
+    12 00000000 488D3C25[00000000]      	lea rdi, [STRING1]
+    13 00000008 488D3425[05000000]      	lea rsi, [STRING2]
+    14 00000010 FC                      	cld
+    15 00000011 668B0C25[0A000000]      	mov cx, [NO_OF_BYTES]
+    16 00000019 F3A6                    	repe cmpsb	; if we use "repne" we get first index that 2 string is equal but we want first index that 2 string is different.
+    17                                  			; if we use scasb we search a character in string !!!
+    18 0000001B 7502                    	jnz .ERROR	 
+    19 0000001D EB18                    	jmp .OK
+    20                                  
+    21                                  .ERROR:
+    22 0000001F B804000000              	mov eax, 4
+    23 00000024 BB01000000              	mov ebx, 1
+    24 00000029 B9[0C000000]            	mov ecx, ER
+    25 0000002E BA03000000              	mov edx, 3
+    26 00000033 CD80                    	int 80H
+    27 00000035 EB18                    	jmp .exit
+    28                                  
+    29                                  .OK:
+    30 00000037 B804000000              	mov eax, 4
+    31 0000003C BB01000000              	mov ebx, 1
+    32 00000041 B9[0F000000]            	mov ecx, OK
+    33 00000046 BA03000000              	mov edx, 3
+    34 0000004B CD80                    	int 80H
+    35 0000004D EB00                    	jmp .exit
+    36                                  
+    37                                  .exit:
+    38 0000004F B801000000              	mov eax, 1
+    39 00000054 BB00000000              	mov ebx, 0
+    40 00000059 CD80                    	int 80H

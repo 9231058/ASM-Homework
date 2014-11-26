@@ -1,0 +1,4 @@
+In the name of god
+
+1. first of all i use radiff tool from radare project to get diffrence between 9231058.EXE (EXE that check password) and 9131058.EXE (EXE that not check password)
+then i was found that at address 0x0000067d my EXE (9231058.EXE) has diffrence !!

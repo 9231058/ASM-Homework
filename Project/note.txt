@@ -13,3 +13,5 @@ then i was found that at address 0x0000067d my EXE (9231058.EXE) has diffrence !
    then code goes to 0x6a7 [exactly after the diffrence section]
 ====================================================================================================================================================================
 3. in the mean time fo using method 2 , i use some trick to find some information but the structure of file is mess !!! so all my clever methods failed.
+====================================================================================================================================================================
+4. with ndisasm i can find exit point of program in 0x39e

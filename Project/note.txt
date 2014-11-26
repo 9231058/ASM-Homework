@@ -2,3 +2,14 @@ In the name of god
 
 1. first of all i use radiff tool from radare project to get diffrence between 9231058.EXE (EXE that check password) and 9131058.EXE (EXE that not check password)
 then i was found that at address 0x0000067d my EXE (9231058.EXE) has diffrence !!
+===================================================================================================================================================================
+2. [0xb0] what is in this address ??
+   [0xb0] = [0xb0] / 2 + 8
+   cmp [0xb0], 0xa
+   if not equal :
+   [0xb0] = 0x3
+   if euqal :
+   [0xb0] = 0x6
+   then code goes to 0x6a7 [exactly after the diffrence section]
+====================================================================================================================================================================
+3. in the mean time fo using method 2 , i use some trick to find some information but the structure of file is mess !!! so all my clever methods failed.

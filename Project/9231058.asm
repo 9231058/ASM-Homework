@@ -788,7 +788,7 @@
 0000071C  5D                pop bp
 0000071D  C3                ret
 0000071E  C3                ret
-0000071F  55                push bp
+0000071F  55                push bp				; I can tell one function start here.
 00000720  8BEC              mov bp,sp
 00000722  56                push si
 00000723  8B7608            mov si,[bp+0x8]
@@ -812,7 +812,7 @@
 00000758  FF16CE03          call word [0x3ce]
 0000075C  FF16D003          call word [0x3d0]
 00000760  FF7604            push word [bp+0x4]
-00000763  E831FC            call word 0x397
+00000763  E831FC            call word 0x397			; Jump to exit function.
 00000766  59                pop cx
 00000767  5E                pop si
 00000768  5D                pop bp

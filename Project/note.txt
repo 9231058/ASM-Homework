@@ -17,3 +17,8 @@ then i was found that at address 0x0000067d my EXE (9231058.EXE) has diffrence !
 3. in the mean time fo using method 2 , i use some trick to find some information but the structure of file is mess !!! so all my clever methods failed.
 ====================================================================================================================================================================
 4. with ndisasm i can find exit point of program in 0x39e
+====================================================================================================================================================================
+5. at last i use turbo debugger and following data dicovered:
+   9231058 : 6dkqd
+   9131015 : ozasg
+   Parham Alvani <==> inavlA mahraP

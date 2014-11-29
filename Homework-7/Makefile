@@ -6,4 +6,3 @@ current_dir = $(notdir $(shell pwd))
 all:
 	${NASM} -l ${current_dir}.lst -o ${current_dir}.o ${current_dir}.asm
 	${GCC} -o ${current_dir} ${current_dir}.o
-

@@ -1,92 +1,85 @@
- ;Saman Fekri 9231075
- Dseg SEGMENT PARA PUBLIC 'data'
-     ROW DW 0
-	 COLUMN DW 0
-	 CX_POW_2 DW 0
- ENDS Dseg
+; In The Name Of God
+; ========================================
+; * File Name : 7.asm
+; 
+; * Creation Date : 03-12-2014
+;
+; * Last Modified : Thu 04 Dec 2014 11:30:54 AM IRST
+;
+; * Created By : Parham Alvani (parham.alvani@gmail.com)
+; =======================================
 
- Cseg SEGMENT PARA PUBLIC 'code'
-    ASSUME DS:Dseg,CS:Cseg,SS:Sseg,ES:NOTHING 
-	
-	POW PROC
-		IMUL AX
-		RET
-	POW ENDP
-	
-	PIXLE_ON MACRO _CX,_DX
-		PUSH AX
-		PUSH BX
-		PUSH CX
-		PUSH DX
-		
-		MOV BH,0
-		MOV AH,0CH
-		MOV CX,_CX
-		MOV DX,_DX
-		MOV AL,3
-		INT 10H
-		
-		POP DX
-		POP CX
-		POP BX
-		POP AX
-	ENDM
-	
-    start:
-        MOV AX,Dseg
-        MOV DS,AX
-		
-		MOV CX,0
-		MOV BX,0
-		
-		MOV AH,00H
-		MOV AL,04H
-		INT 10H
-		
-		MOV CX,-100
-	_FOR1:	
-		MOV AX,CX
-		CALL POW
-		MOV CX_POW_2,AX
-		
-		MOV BX,-100
-	_FOR2:
-		MOV AX,BX
-		CALL POW
-		
-		ADD AX,CX_POW_2
-		
-		CMP AX,2500
-		JG NEXT
-		
-		MOV ROW,CX
-		MOV DX,ROW
-		ADD DX,DX
-		MOV ROW,DX
-		
-		ADD ROW,160
-		MOV COLUMN,BX
-		ADD COLUMN,100
-		PIXLE_ON ROW,COLUMN
-		
-		ADD ROW,1
-		PIXLE_ON ROW,COLUMN
-	NEXT:
-		INC BX
-		CMP BX,100
-		JNE _FOR2
-		
-		INC CX
-		CMP CX,100
-		JNE _FOR1
-	    
-          
-    finish:         ;back to OS
-        MOV AH,4CH
-        INT 21H      
- ENDS Cseg
+%macro pixel_on 2	; Make pixel at (%1, %2) on.	
+	mov dx, %1
+	mov cx, %2
+	mov bh, 0
+	mov ah, 0CH
+	mov al, 00000111B
+	int 10H
+%endmacro
 
- Sseg SEGMENT PARA STACK 'stack'
- 	db 1000 DUP()
- ENDS Sseg
- END start
+section data align=16 public
+	x2: dw 0
+	y2: dw 0
+section code align=16 public	
+..start:
+	mov ax, data	; Initializing
+	mov ds, ax
+	mov ax, stack
+	mov ss, ax
+	mov ax, stacktop
+	mov sp, ax
+
+	mov ah, 00H	; Set screen mode in 480 * 640 and 16 color
+	mov al, 12H
+	int 10H
+		
+	mov cx, -240
+
+.outer_loop:
+	mov ax, cx	; x2 = x * x
+	imul ax
+	mov [x2], ax;
+
+	mov bx, -320
+
+.inner_loop:
+	mov ax, bx	; y2 = y * y
+	imul ax
+	mov [y2], ax
+
+	mov ax, [x2]	; y2 + x2 <> 50 * 50
+	add ax, [y2]
+	cmp ax, 2500
+	jne .next
+	push cx
+	push bx
+	add cx, 240
+	add bx, 320
+	pixel_on cx, bx
+	pop bx
+	pop cx
+	push cx
+	push bx
+	add cx, 240
+	add bx, 320
+	add bx, 10
+	pixel_on cx, bx
+	pop bx
+	pop cx
+
+.next:
+	inc bx
+	cmp bx, 320
+	jne .inner_loop
+		
+	inc cx
+	cmp cx, 240
+	jne .outer_loop
+
+.finish:	; Return to OS
+	mov ah,4CH
+	int 21H
+section stack align=16 stack
+	resb 1024
+stacktop:

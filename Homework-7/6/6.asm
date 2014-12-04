@@ -4,7 +4,7 @@
 ; 
 ; * Creation Date : 03-12-2014
 ;
-; * Last Modified : Thu 04 Dec 2014 11:15:12 AM IRST
+; * Last Modified : Thu 04 Dec 2014 11:07:44 PM IRST
 ;
 ; * Created By : Parham Alvani (parham.alvani@gmail.com)
 ; =======================================
@@ -39,6 +39,7 @@ section code align=16 public
 .outer_loop:
 	mov ax, cx	; x2 = x * x
 	imul ax
+	jo .next_outer
 	mov [x2], ax;
 
 	mov bx, -320
@@ -46,12 +47,14 @@ section code align=16 public
 .inner_loop:
 	mov ax, bx	; y2 = y * y
 	imul ax
+	jo .next_inner
 	mov [y2], ax
 
 	mov ax, [x2]	; y2 + x2 <> 50 * 50
 	add ax, [y2]
+	jo .next_inner
 	cmp ax, 2500
-	jne .next
+	jne .next_inner
 	push cx
 	push bx
 	add cx, 240
@@ -60,11 +63,12 @@ section code align=16 public
 	pop bx
 	pop cx
 
-.next:
+.next_inner:
 	inc bx
 	cmp bx, 320
 	jne .inner_loop
-		
+	
+.next_outer:
 	inc cx
 	cmp cx, 240
 	jne .outer_loop

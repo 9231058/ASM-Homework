@@ -1,3 +1,13 @@
+; In The Name Of God
+; ========================================
+; [] File Name : 6.asm
+; 
+; [] Creation Date : 08-01-2015
+;
+; [] Last Modified : Thu 08 Jan 2015 07:01:19 PM IRST
+;
+; [] Created By : Parham Alvani (parham.alvani@gmail.com)
+; =======================================
 section .data
 	unsorted_array: db '2', '1', '3'
 	len: equ $ - unsorted_array
@@ -42,7 +52,7 @@ _start:
 	int 80H
 msort:
 	cmp eax, ebx
-	jae end_msort
+	jae .end
 
 	push rax	; save state
 	push rbx
@@ -118,5 +128,5 @@ flush_merge:
 	inc esi
 	jmp flush_merge
 
-end_msort:
+.end:
 	ret

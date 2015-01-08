@@ -1,0 +1,43 @@
+     1                                  section .bss
+     2 00000000 <res 00000400>          	buff: resb 1024
+     3                                  section .text
+     4                                  	global _start
+     5                                  _start:
+     6 00000000 48BF-                   	mov rdi, buff
+     7 00000002 [0000000000000000] 
+     8 0000000A BE00000000              	mov rsi, 0
+     9                                  
+    10 0000000F 48FFCF                  	dec rdi
+    11                                  read:
+    12 00000012 48FFC7                  	inc rdi
+    13                                  
+    14 00000015 B803000000              	mov rax, 3
+    15 0000001A BB00000000              	mov rbx, 0
+    16 0000001F 4889F9                  	mov rcx, rdi
+    17 00000022 BA01000000              	mov rdx, 1
+    18 00000027 CD80                    	int 80H
+    19                                  
+    20 00000029 48FFC6                  	inc rsi
+    21                                  
+    22 0000002C 803F0A                  	cmp byte [rdi], 10
+    23 0000002F 740F                    	jz write
+    24                                  
+    25 00000031 803F61                  	cmp byte [rdi], 97
+    26 00000034 72DC                    	jb read
+    27                                  	
+    28 00000036 803F7A                  	cmp byte [rdi], 122
+    29 00000039 77D7                    	ja read
+    30                                  	
+    31 0000003B 802F20                  	sub byte [rdi], 32
+    32 0000003E EBD2                    	jmp read
+    33                                  write:
+    34 00000040 B804000000              	mov rax, 4
+    35 00000045 BB01000000              	mov rbx, 1
+    36 0000004A 48B9-                   	mov rcx, buff
+    37 0000004C [0000000000000000] 
+    38 00000054 4889F2                  	mov rdx, rsi
+    39 00000057 CD80                    	int 80H
+    40                                  
+    41 00000059 B801000000              	mov rax, 1
+    42 0000005E BB00000000              	mov rbx, 0
+    43 00000063 CD80                    	int 80H

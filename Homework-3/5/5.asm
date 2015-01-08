@@ -1,9 +1,19 @@
+; In The Name Of God
+; ========================================
+; [] File Name : 5.asm
+; 
+; [] Creation Date : 08-01-2015
+;
+; [] Last Modified : Thu 08 Jan 2015 06:57:08 PM IRST
+;
+; [] Created By : Parham Alvani (parham.alvani@gmail.com)
+; =======================================
 section .data
 	start_array: db '1', '2', '3', '4', '5', '0', '6', 10
 	end_array: equ $ - 2
 section .text
-	global main
-main:
+	global _start
+_start:
 	mov rdi, end_array
 
 outter_loop:

@@ -1,8 +1,18 @@
+; In The Name Of God
+; ========================================
+; [] File Name : 4.asm
+; 
+; [] Creation Date : 08-01-2015
+;
+; [] Last Modified : Thu 08 Jan 2015 06:55:32 PM IRST
+;
+; [] Created By : Parham Alvani (parham.alvani@gmail.com)
+; =======================================
 section .bss
 	buff: resb 1024
 section .text
-	global main
-main:
+	global _start
+_start:
 	mov rdi, buff
 	mov rsi, 0
 

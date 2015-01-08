@@ -60,13 +60,13 @@
     60                                  
     61                                  checker:
     62 00000074 80FC30                  	cmp ah, '0'
-    63 00000077 7206                    	jb checker_false
+    63 00000077 7206                    	jb .false
     64                                  
     65 00000079 80FC39                  	cmp ah, '9'
-    66 0000007C 7701                    	ja checker_false
+    66 0000007C 7701                    	ja .false
     67                                  
     68 0000007E C3                      	ret
     69                                  
-    70                                  checker_false:
+    70                                  .false:
     71 0000007F B400                    	mov ah, 0
     72 00000081 C3                      	ret

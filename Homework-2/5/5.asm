@@ -44,7 +44,8 @@ _start:
 	jz _start
 	sub ah, 30H
 	
-	mov bl, 10	; add 10 * ah to al , in order to make 2 digit number
+	mov bl, 10	; add 10 * ah to al ,
+			; in order to make 2 digit number
 	mov bh, al
 	mov al, ah
 	mov ah, 0
@@ -58,13 +59,12 @@ exit:
 
 checker:
 	cmp ah, '0'
-	jb checker_false
+	jb .false
 
 	cmp ah, '9'
-	ja checker_false
+	ja .false
 
 	ret
-
-checker_false:
+.false:
 	mov ah, 0
 	ret

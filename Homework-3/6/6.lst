@@ -1,0 +1,132 @@
+     1                                  ; In The Name Of God
+     2                                  ; ========================================
+     3                                  ; [] File Name : 6.asm
+     4                                  ; 
+     5                                  ; [] Creation Date : 08-01-2015
+     6                                  ;
+     7                                  ; [] Last Modified : Thu 08 Jan 2015 06:58:32 PM IRST
+     8                                  ;
+     9                                  ; [] Created By : Parham Alvani (parham.alvani@gmail.com)
+    10                                  ; =======================================
+    11                                  section .data
+    12 00000000 323133                  	unsorted_array: db '2', '1', '3'
+    13                                  	len: equ $ - unsorted_array
+    14                                  	
+    15 00000003 0A                      	eol: db 10
+    16                                  section .bss
+    17 00000000 <res 00000003>          	sorted_array resb len
+    18                                  section .text
+    19                                  	global _start
+    20                                  _start:
+    21 00000000 B804000000              	mov eax, 4
+    22 00000005 BB01000000              	mov ebx, 1
+    23 0000000A B9[00000000]            	mov ecx, unsorted_array
+    24 0000000F BA03000000              	mov edx, len
+    25 00000014 CD80                    	int 80H
+    26                                  	
+    27 00000016 B804000000              	mov eax, 4
+    28 0000001B BB01000000              	mov ebx, 1
+    29 00000020 B9[03000000]            	mov ecx, eol
+    30 00000025 BA01000000              	mov edx, 1
+    31 0000002A CD80                    	int 80H
+    32                                  
+    33 0000002C B800000000              	mov eax, 0
+    34 00000031 BB03000000              	mov ebx, len
+    35 00000036 FFCB                    	dec ebx
+    36 00000038 E838000000              	call msort
+    37                                  
+    38 0000003D B804000000              	mov eax, 4
+    39 00000042 BB01000000              	mov ebx, 1
+    40 00000047 B9[00000000]            	mov ecx, unsorted_array
+    41 0000004C BA03000000              	mov edx, len
+    42 00000051 CD80                    	int 80H
+    43                                  
+    44 00000053 B804000000              	mov eax, 4
+    45 00000058 BB01000000              	mov ebx, 1
+    46 0000005D B9[03000000]            	mov ecx, eol
+    47 00000062 BA01000000              	mov edx, 1
+    48 00000067 CD80                    	int 80H
+    49                                  
+    50 00000069 B801000000              	mov eax, 1
+    51 0000006E BB00000000              	mov ebx, 0
+    52 00000073 CD80                    	int 80H
+    53                                  msort:
+    54 00000075 39D8                    	cmp eax, ebx
+    55 00000077 0F83B8000000            	jae end_msort
+    56                                  
+    57 0000007D 50                      	push rax	; save state
+    58 0000007E 53                      	push rbx
+    59                                  
+    60 0000007F 89DA                    	mov edx, ebx	; save end of array
+    61                                  
+    62 00000081 D1EB                    	shr ebx, 1	; find half of array and sort first half
+    63 00000083 E8EDFFFFFF              	call msort
+    64                                  	
+    65 00000088 FFC3                    	inc ebx		; load end of array and sort second half
+    66 0000008A 89D8                    	mov eax, ebx
+    67 0000008C 89D3                    	mov ebx, edx
+    68 0000008E E8E2FFFFFF              	call msort
+    69                                  
+    70 00000093 5B                      	pop rbx		; load state
+    71 00000094 58                      	pop rax
+    72                                  	
+    73 00000095 89DA                    	mov edx, ebx	; eax = begin, edx = half, ebx = end
+    74 00000097 D1EA                    	shr edx, 1
+    75                                  
+    76 00000099 4189C0                  	mov r8d, eax	; edi = destination index, r8d = first half index, r9d = second half index
+    77 0000009C 4189D1                  	mov r9d, edx
+    78 0000009F 41FFC1                  	inc r9d
+    79 000000A2 89C7                    	mov edi, eax
+    80                                  	
+    81 000000A4 89C6                    	mov esi, eax	; for flushing level
+    82                                  merge:
+    83 000000A6 67458A90[00000000]      	mov byte r10b, [unsorted_array + r8d]
+    84 000000AE 67458A99[00000000]      	mov byte r11b, [unsorted_array + r9d]
+    85 000000B6 4538DA                  	cmp r10b, r11b
+    86 000000B9 7602                    	jbe first_to_dis
+    87 000000BB EB14                    	jmp second_to_dis
+    88                                  
+    89                                  first_to_dis:
+    90 000000BD 67448897[00000000]      	mov byte [sorted_array + edi], r10b
+    91 000000C5 41FFC0                  	inc r8d
+    92 000000C8 FFC7                    	inc edi
+    93 000000CA 4139D0                  	cmp r8d, edx
+    94 000000CD 7732                    	ja end_second_to_dis
+    95 000000CF EBD5                    	jmp merge
+    96                                  
+    97                                  second_to_dis:
+    98 000000D1 6744889F[00000000]      	mov byte [sorted_array + edi], r11b
+    99 000000D9 41FFC1                  	inc r9d
+   100 000000DC FFC7                    	inc edi
+   101 000000DE 4139D9                  	cmp r9d, ebx
+   102 000000E1 7702                    	ja end_first_to_dis
+   103 000000E3 EBC1                    	jmp merge
+   104                                  
+   105                                  end_first_to_dis:
+   106 000000E5 4139D0                  	cmp r8d, edx
+   107 000000E8 7733                    	ja flush_merge
+   108 000000EA 67458A90[00000000]      	mov byte r10b, [unsorted_array + r8d]
+   109 000000F2 67448897[00000000]      	mov byte [sorted_array + edi], r10b
+   110 000000FA 41FFC0                  	inc r8d
+   111 000000FD FFC7                    	inc edi
+   112 000000FF EBE4                    	jmp end_first_to_dis
+   113                                  
+   114                                  end_second_to_dis:
+   115 00000101 4139D9                  	cmp r9d, ebx
+   116 00000104 7717                    	ja flush_merge
+   117 00000106 67458A99[00000000]      	mov byte r11b, [unsorted_array + r9d]
+   118 0000010E 6744889F[00000000]      	mov byte [sorted_array + edi], r11b
+   119 00000116 41FFC1                  	inc r9d
+   120 00000119 FFC7                    	inc edi
+   121 0000011B EBE4                    	jmp end_second_to_dis
+   122                                  
+   123                                  flush_merge:
+   124 0000011D 39DE                    	cmp esi, ebx
+   125 0000011F 7714                    	ja end_msort
+   126 00000121 67448A9E[00000000]      	mov byte r11b, [sorted_array + esi]
+   127 00000129 6744889E[00000000]      	mov byte [unsorted_array + esi], r11b
+   128 00000131 FFC6                    	inc esi
+   129 00000133 EBE8                    	jmp flush_merge
+   130                                  
+   131                                  end_msort:
+   132 00000135 C3                      	ret

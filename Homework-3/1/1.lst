@@ -1,0 +1,44 @@
+     1                                  BITS 64
+     2                                  section .data
+     3 00000000 1E00000000000000        	num_1: dq 30
+     4 00000008 1400000000000000        	num_2: dq 20
+     5 00000010 0A00000000000000        	num_3: dq 10
+     6                                  
+     7 00000018 4E756D626572732061-     	format: db "Numbers are : %d %d %d", 10, 0
+     8 00000021 7265203A2025642025-
+     9 0000002A 642025640A00       
+    10                                  section .text
+    11                                  	global main
+    12                                  	extern printf
+    13                                  main:
+    14 00000000 488B0425[00000000]      	mov qword rax, [num_1]
+    15 00000008 488B1C25[08000000]      	mov qword rbx, [num_2]
+    16 00000010 488B0C25[10000000]      	mov qword rcx, [num_3]
+    17                                  level_1:
+    18 00000018 4839D8                  	cmp rax, rbx
+    19 0000001B 7C02                    	jl level_2
+    20 0000001D 4893                    	xchg rax, rbx
+    21                                  level_2:
+    22 0000001F 4839CB                  	cmp rbx, rcx
+    23 00000022 7C03                    	jl level_3
+    24 00000024 4887D9                  	xchg rbx, rcx
+    25                                  level_3:
+    26 00000027 4839D8                  	cmp rax, rbx
+    27 0000002A 7C02                    	jl finish
+    28 0000002C 4893                    	xchg rax, rbx
+    29                                  finish:
+    30 0000002E 48890425[00000000]      	mov qword [num_1], rax
+    31 00000036 48891C25[08000000]      	mov qword [num_2], rbx
+    32 0000003E 48890C25[10000000]      	mov qword [num_3], rcx
+    33                                  
+    34 00000046 B000                    	mov al, 0
+    35 00000048 48BF-                   	mov rdi, format
+    36 0000004A [1800000000000000] 
+    37 00000052 488B3425[00000000]      	mov qword rsi, [num_1]
+    38 0000005A 488B1425[08000000]      	mov qword rdx, [num_2]
+    39 00000062 488B0C25[10000000]      	mov qword rcx, [num_3]
+    40 0000006A E8(00000000)            	call printf
+    41                                  
+    42 0000006F B801000000              	mov rax, 1
+    43 00000074 BB00000000              	mov rbx, 0
+    44 00000079 CD80                    	int 80H

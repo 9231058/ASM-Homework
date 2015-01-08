@@ -60,13 +60,13 @@ exit:
 
 checker:
 	cmp ah, '0'
-	jb checker_false
+	jb .false
 
 	cmp ah, '9'
-	ja checker_false
+	ja .false
 
 	ret
 
-checker_false:
+.false:
 	mov ah, 0
 	ret

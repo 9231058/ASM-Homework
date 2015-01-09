@@ -1,3 +1,13 @@
+; In The Name Of God
+; ========================================
+; [] File Name : 7.asm
+; 
+; [] Creation Date : 09-01-2015
+;
+; [] Last Modified : Fri 09 Jan 2015 08:10:56 AM IRST
+;
+; [] Created By : Parham Alvani (parham.alvani@gmail.com)
+; =======================================
 section .data
 	_word: dw 1111111111111111b
 	format: db "The number of 1 is: %d", 10, 0
